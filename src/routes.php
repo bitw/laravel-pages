@@ -10,7 +10,7 @@ Route::group(['namespace' => 'Bitw\\Pages\\Controllers'], function($route){
 	$route->get('{page}.html', ['as'=>'page.show', 'uses'=>'PageController@show']);
 
 	// Manage pages
-	$route->get(Config::get('app.route.prefix_control_panel') . '/page', ['before'=>'auth','as'=>'page.manage','uses'=>'PageController@index']);
+	$route->get(Config::get('pages::config.url_cp_prefix'). '/page', ['before'=>'auth','as'=>'page.manage','uses'=>'PageController@index']);
 
 	$route->group(['prefix'=>'page', 'before'=>'auth'], function($route){
 			// Create form

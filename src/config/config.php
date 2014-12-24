@@ -8,6 +8,6 @@
 
 return array(
 
-	'url_cp_prefix' => '',
+	'url_cp_prefix' => Config::get('app.route.prefix_control_panel'),
 
 );
