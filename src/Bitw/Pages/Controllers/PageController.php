@@ -19,7 +19,7 @@ class PageController extends \BaseController {
 	public function index()
 	{
 		//dd(View::getFinder()->getHints());
-		$data = Page::where('state', '!=', 'temp')->whereAuthorId(Auth::id())->paginate(10);
+		$data = Page::where('state', '!=', 'temp')->whereAuthorId(Auth::id())->orderBy('lft')->get();
 
 		return View::make('pages::list', compact('data'));
 	}
@@ -69,7 +69,7 @@ class PageController extends \BaseController {
 
 		if(!$page || ($page->state == 'disabled' && $page->author_id != Auth::id())) return \App::abort(404);
 
-		return View::make('pages::show', compact('page'));
+		return View::make('site.home', $page->toArray());
 	}
 
 
@@ -92,7 +92,16 @@ class PageController extends \BaseController {
 		$page->_method = 'put';
 		$page->_route = ['page.update', $page->id];
 
-		return View::make('pages::editor', compact('page'));
+		$pages = Page::where('state', '!=', 'temp')->orderBy('lft')->get(['id', 'title', 'depth']);
+
+		$pg[null] = '---';
+
+		foreach($pages as $item)
+		{
+			$pg[$item->id] = str_repeat('---', $item->depth).' '. $item->title;
+		}
+
+		return View::make('pages::editor', compact('page'))->with('pages', $pg);
 	}
 
 
@@ -118,6 +127,20 @@ class PageController extends \BaseController {
 			: false;
 
 		$page->fill($post)->save();
+
+		if($page->parent_id != $post['parent_id'])
+		{
+			if(!$post['parent_id'])
+			{
+				$page->makeRoot();//(Page::find($post['parent_id']));
+			}
+			else
+			{
+				$page->makeLastChildOf(Page::find($post['parent_id']));
+			}
+		}
+
+		\Pages::compileMenu();
 
 		return Redirect::route('page.manage');
 	}
