@@ -23,17 +23,22 @@ class PagesServiceProvider extends ServiceProvider {
 
 		include __DIR__ . '/../../routes.php';
 
-		$page = Page::whereState('published')->whereIsHomepage(true)->first();
+		if(\Request::path() == \Config::get('pages::config.url_is_homepage'))
+		{
+			$page = Page::whereState('published')->whereIsHomepage(true)->first();
 
-		\View::composer('site.home', function($view) use($page){
-			$view->with([
-				'title'         => $page->title,
-				'description'   => $page->description,
-				'keywords'      => $page->keywords,
-				'content'       => $page->content,
-			]);
+			\View::composer('site.*', function($view) use($page){
+				$view->with([
+					'title'         => $page->title,
+					'description'   => $page->description,
+					'keywords'      => $page->keywords,
+					'content'       => $page->content,
+				]);
+			});
 
-		});
+			//\View::composer('site.*')
+
+		}
 	}
 
 	/**
