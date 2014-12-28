@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 class Page extends Node implements SluggableInterface
 {
 
-	use SoftDeletingTrait;
+	//use SoftDeletingTrait;
 	use SluggableTrait;
 	/**
 	 * Table name.
