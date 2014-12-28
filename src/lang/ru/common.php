@@ -11,6 +11,8 @@ return array(
 	'page' => 'Страница',
 	'pages' => 'Страницы',
 
+	'homepage' => 'Главная',
+
 	'creating_page' => 'Создание страницы',
 	'edit_page' => 'Редактирование страницы',
 
@@ -19,6 +21,7 @@ return array(
 	'keywords' => 'Ключевые слова',
 	'state' => 'Состояние',
 	'show_in_menu' => 'Показывать в меню',
+	'text_in_menu' => 'Текст в меню',
 
 	'back_to_list_pages' => 'Назад к списку страниц',
 
