@@ -3,14 +3,15 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h3>{{ trans('pages::common.pages') }}</h3>
+            <h3>{{ trans('pages::common.pages') }} <a href="{{ route('page.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;{{ trans('common.create') }}</a></h3>
             <table class="table table-hover">
                 <thead>
                     <tr>
                         <th class="text-center">#</th>
                         <th class="text-center" colspan="3">{{ trans('pages::common.state') }}</th>
                         <th>{{ trans('pages::common.title') }}</th>
-                        <th class="text-right"><a href="{{ route('page.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;{{ trans('common.create') }}</a></th>
+                        <th>{{ trans('pages::common.text_in_menu') }}</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,7 +31,10 @@
                             <td style="width:14px;" class="text-center">
                                 {{ Form::radio('homepage', $page->id, $page->is_homepage) }}
                             </td>
-                            <td>{{ Str::limit($page->title, 30) }}</td>
+                            <td>
+                                {{ $page->depth ? '<span style="color:#dedede;">'.str_repeat('&middot;', $page->depth*4)."</span> " : '' }}{{ Str::limit($page->title, 60) }}
+                            </td>
+                            <td>{{ Str::limit($page->menu_title, 60) }}</td>
                             <td style="text-align: right">
                                 <a href="{{ route('page.show', ['page'=>$page->slug]) }}" class="btn btn-xs btn-default"><i class="fa fa-eye"></i></a>
                                 <a href="{{ route('page.edit', ['page'=>$page->id]) }}" class="btn btn-xs btn-default"><i class="fa fa-pencil"></i></a>
@@ -42,7 +46,7 @@
             </table>
         </div>
     </div>
-    {{ $data->links() }}
+    {{-- $data->links() --}}
 @stop
 
 @section('foot_append') @parent

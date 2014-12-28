@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                 <div class="form-group">
-                    {{ Form::textarea('content', Input::get('content', $page->content)) }}
+                    {{ Form::textarea('content', Input::get('content', $page->content), ['rows'=>23]) }}
                 </div>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -43,10 +43,19 @@
                     <label for="keywords">{{ trans('pages::common.keywords') }}</label>
                     {{ Form::textarea('keywords', Input::get('keywords', $page->keywords), ['id'=>'keywords','class'=>'form-control', 'rows'=>2]) }}
                 </div>
+                <div class="form-group">
+                    <label for="parent_id">{{ trans('pages::common.parent_page') }}</label>
+                    {{ Form::select('parent_id', $pages, Input::get('parent_id', $page->parent_id), ['id'=>'parent_id','class'=>'form-control']) }}
+                </div>
                 <div class="checkbox">
                     <label for="show_in_menu">
                         {{ Form::checkbox('show_in_menu', 1, $page->show_in_menu, ['id'=>'show_in_menu']) }} {{ trans('pages::common.show_in_menu') }}
                     </label>
+                </div>
+                <div class="form-group">
+                    <label for="show_in_menu">{{ trans('pages::common.text_in_menu') }}</label>
+                    {{ Form::text('menu_title', Input::get('menu_title', $page->menu_title), ['id'=>'menu_title','class'=>'form-control']) }}
+
                 </div>
             </div>
         </div>
@@ -54,6 +63,7 @@
 @endsection
 
 @section('foot_append') @parent
+{{--
 <script src="/bower_components/ckeditor/ckeditor.js"></script>
 <script src="/bower_components/ckeditor/adapters/jquery.js"></script>
 <script>
@@ -61,6 +71,18 @@
         $('textarea[name=content]').ckeditor({
             height: 350
         });
+        $('option[value={{ $page->id }}]').attr('disabled', 'disabled');
+    });
+</script>
+--}}
+<!--script src="/bower_components/tinymce/tinymce.jquery.min.js"></script-->
+<script type="text/javascript" src="/bower_components/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="{{ url('') }}/tinymce/tinymce_editor.js"></script>
+<script>
+    $(function(){
+        editor_config.selector = "textarea[name=content]";
+        tinymce.init(editor_config);
+        $('option[value={{ $page->id }}]').attr('disabled', 'disabled');
     });
 </script>
 @stop
